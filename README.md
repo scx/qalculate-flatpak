@@ -71,11 +71,13 @@ $ flatpak-builder --run "build" "io.github.qalculate.Qalculate.yaml" "sh"
 $ flatpak-builder --run "build" "io.github.qalculate.Qalculate.yaml" "qalculate-gtk"
 ```
 
-### Install
+### Create repo
 
 ```
 $ flatpak-builder --repo="repo" --force-clean "build" "io.github.qalculate.Qalculate.yaml"
 ```
+
+### Install
 
 ```
 $ flatpak --user remote-add --no-gpg-verify "qalculate-gtk" "repo"
@@ -104,7 +106,7 @@ $ flatpak --user remote-delete "qalculate-gtk"
 ### Build single-file bundle
 
 ```
-$ flatpak build-bundle "repo" "qalculate.flatpak" "io.github.qalculate.Qalculate" --runtime-repo="https://flathub.org/repo/flathub.flatpakrepo"
+$ flatpak build-bundle "repo" "qalculate-gtk.flatpak" "io.github.qalculate.Qalculate" --runtime-repo="https://flathub.org/repo/flathub.flatpakrepo"
 ```
 
 ### Install single-file bundle
@@ -112,7 +114,7 @@ $ flatpak build-bundle "repo" "qalculate.flatpak" "io.github.qalculate.Qalculate
 If you have already [installed](#install) the package, you have to [uninstall](#uninstall) it before continuing.
 
 ```
-$ flatpak --user install "qalculate.flatpak"
+$ flatpak --user install "qalculate-gtk.flatpak"
 ```
 
 See also:
