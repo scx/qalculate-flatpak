@@ -44,14 +44,22 @@ See also:
 ### Prepare
 
 ```
-$ flatpak install "flathub" "org.gnome.Sdk//3.32"
+$ flatpak install "flathub" "org.gnome.Sdk//3.34"
 ```
 
 ```
-$ flatpak install "flathub" "org.gnome.Platform//3.32"
+$ flatpak install "flathub" "org.gnome.Platform//3.34"
 ```
 
 Clone this repository, then checkout the right branch.
+
+```
+$ git submodule init
+```
+
+```
+$ git submodule update
+```
 
 ### Build
 
@@ -118,6 +126,7 @@ $ flatpak --user install "qalculate-gtk.flatpak"
 ```
 
 See also:
+
 * [Building your first Flatpak](http://docs.flatpak.org/en/latest/first-build.html)
 * [Single-file bundles](http://docs.flatpak.org/en/latest/single-file-bundles.html#single-file-bundles)
 
