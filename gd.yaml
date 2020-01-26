@@ -9,16 +9,28 @@ sources:
   # CVE-2018-5711
   # https://access.redhat.com/security/cve/cve-2018-5711
   # https://github.com/libgd/libgd/commit/a11f47475e6443b7f32d21f2271f28f417e2ac04
-  # https://src.fedoraproject.org/rpms/gd/blob/63c4b6d2fcdaa41d5281b86084a17d352cb450c3/f/gd-2.2.5-upstream.patch
+  # https://src.fedoraproject.org/rpms/gd/blob/dc2735f5a8807dc8896cccf5f0d9f66ecea5c0dd/f/gd-2.2.5-upstream.patch
   - type: patch
     path: gd-2.2.5-upstream.patch
   # bmp: check return value in gdImageBmpPtr
   # CVE-2018-1000222
   # https://access.redhat.com/security/cve/cve-2018-1000222
   # https://github.com/libgd/libgd/commit/ac16bdf2d41724b5a65255d4c28fb0ec46bc42f5
-  # https://src.fedoraproject.org/rpms/gd/blob/63c4b6d2fcdaa41d5281b86084a17d352cb450c3/f/gd-2.2.5-gdImageBmpPtr-double-free.patch
+  # https://src.fedoraproject.org/rpms/gd/blob/dc2735f5a8807dc8896cccf5f0d9f66ecea5c0dd/f/gd-2.2.5-gdImageBmpPtr-double-free.patch
   - type: patch
     path: gd-2.2.5-gdImageBmpPtr-double-free.patch
+  # heap based buffer overflow in gd_color_match.c:gdImageColorMatch() in libgd as used in imagecolormatch()
+  # CVE-2019-6977
+  # https://nvd.nist.gov/vuln/detail/CVE-2019-6977
+  # https://src.fedoraproject.org/rpms/gd/blob/dc2735f5a8807dc8896cccf5f0d9f66ecea5c0dd/f/gd-2.2.5-heap-based-buffer-overflow.patch
+  - type: patch
+    path: gd-2.2.5-heap-based-buffer-overflow.patch
+  # Potential double-free in gdImage*Ptr()
+  # CVE-2019-6978
+  # https://nvd.nist.gov/vuln/detail/CVE-2019-6978
+  # https://src.fedoraproject.org/rpms/gd/blob/dc2735f5a8807dc8896cccf5f0d9f66ecea5c0dd/f/gd-2.2.5-potential-double-free.patch
+  - type: patch
+    path: gd-2.2.5-potential-double-free.patch
   - type: shell
     commands:
       - cp -p /usr/share/automake-*/config.{sub,guess} "config"/;
