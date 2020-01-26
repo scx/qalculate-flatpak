@@ -1,0 +1,1202 @@
+From 7e7404c86f5b303e6cd6364f98da2d2280921d78 Mon Sep 17 00:00:00 2001
+From: Hanna K <hanna.knutsson@protonmail.com>
+Date: Fri, 24 Jan 2020 11:53:45 +0100
+Subject: [PATCH] Install multiple icon sizes
+
+---
+ configure.ac                                  |   9 +
+ data/Makefile.am                              |   9 +-
+ data/icons/16x16/Makefile.am                  |   5 +
+ .../16x16/qalculate.png}                      | Bin
+ .../16x16/rpn-swap-symbolic.png}              | Bin
+ data/icons/22x22/Makefile.am                  |   5 +
+ .../22x22/qalculate.png}                      | Bin
+ data/icons/24x24/Makefile.am                  |   5 +
+ .../24x24/qalculate.png}                      | Bin
+ .../24x24/rpn-swap-symbolic.png}              | Bin
+ data/icons/256x256/Makefile.am                |   5 +
+ .../256x256/qalculate.png}                    | Bin
+ data/icons/32x32/Makefile.am                  |   5 +
+ .../32x32/qalculate.png}                      | Bin
+ .../32x32/rpn-swap-symbolic.png}              | Bin
+ data/icons/48x48/Makefile.am                  |   5 +
+ .../48x48/qalculate.png}                      | Bin
+ .../48x48/rpn-swap-symbolic.png}              | Bin
+ data/icons/64x64/Makefile.am                  |   5 +
+ data/{ => icons/64x64}/qalculate.png          | Bin
+ .../64x64/rpn-swap-symbolic.png}              | Bin
+ data/icons/Makefile.am                        |  14 +
+ data/icons/scalable/Makefile.am               |   5 +
+ data/icons/scalable/qalculate.svg             | 259 +++++++++++++++
+ data/icons/scalable/qalculate256.svg          | 309 ++++++++++++++++++
+ .../scalable}/rpn-swap-symbolic.svg           |   0
+ data/qalculate128.png                         | Bin 11202 -> 0 bytes
+ data/qalculate64.png                          | Bin 4558 -> 0 bytes
+ data/ui.gresource.xml                         |  12 +-
+ 30 files changed, 640 insertions(+), 12 deletions(-)
+ create mode 100644 data/icons/16x16/Makefile.am
+ rename data/{qalculate16.png => icons/16x16/qalculate.png} (100%)
+ rename data/{rpn-swap-symbolic-16.png => icons/16x16/rpn-swap-symbolic.png} (100%)
+ create mode 100644 data/icons/22x22/Makefile.am
+ rename data/{qalculate22.png => icons/22x22/qalculate.png} (100%)
+ create mode 100644 data/icons/24x24/Makefile.am
+ rename data/{qalculate24.png => icons/24x24/qalculate.png} (100%)
+ rename data/{rpn-swap-symbolic-24.png => icons/24x24/rpn-swap-symbolic.png} (100%)
+ create mode 100644 data/icons/256x256/Makefile.am
+ rename data/{qalculate256.png => icons/256x256/qalculate.png} (100%)
+ create mode 100644 data/icons/32x32/Makefile.am
+ rename data/{qalculate32.png => icons/32x32/qalculate.png} (100%)
+ rename data/{rpn-swap-symbolic-32.png => icons/32x32/rpn-swap-symbolic.png} (100%)
+ create mode 100644 data/icons/48x48/Makefile.am
+ rename data/{qalculate48.png => icons/48x48/qalculate.png} (100%)
+ rename data/{rpn-swap-symbolic-48.png => icons/48x48/rpn-swap-symbolic.png} (100%)
+ create mode 100644 data/icons/64x64/Makefile.am
+ rename data/{ => icons/64x64}/qalculate.png (100%)
+ rename data/{rpn-swap-symbolic-64.png => icons/64x64/rpn-swap-symbolic.png} (100%)
+ create mode 100644 data/icons/Makefile.am
+ create mode 100644 data/icons/scalable/Makefile.am
+ create mode 100644 data/icons/scalable/qalculate.svg
+ create mode 100644 data/icons/scalable/qalculate256.svg
+ rename data/{ => icons/scalable}/rpn-swap-symbolic.svg (100%)
+ delete mode 100644 data/qalculate128.png
+ delete mode 100644 data/qalculate64.png
+
+diff --git a/configure.ac b/configure.ac
+index 4570f3f..e40c932 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -134,6 +134,15 @@ dnl  --------
+ AC_OUTPUT([
+   Makefile
+   data/Makefile
++  data/icons/Makefile
++  data/icons/16x16/Makefile
++  data/icons/22x22/Makefile
++  data/icons/24x24/Makefile
++  data/icons/32x32/Makefile
++  data/icons/48x48/Makefile
++  data/icons/64x64/Makefile
++  data/icons/256x256/Makefile
++  data/icons/scalable/Makefile
+   doc/Makefile
+   src/Makefile
+   po/Makefile.in
+diff --git a/data/Makefile.am b/data/Makefile.am
+index ad9eb93..a651139 100644
+--- a/data/Makefile.am
++++ b/data/Makefile.am
+@@ -2,12 +2,13 @@
+ # data/Makefile.am for qalculate
+ #
+ 
++SUBDIRS = icons
++
+ noinst_DATA = argumentrules.ui calendarconversion.ui csvexport.ui csvimport.ui datasetedit.ui datasets.ui decimals.ui \
+ 	functionedit.ui functions.ui main.ui matrix.ui matrixedit.ui namesedit.ui nbases.ui shortcuts.ui \
+ 	setbase.ui percentage.ui periodictable.ui plot.ui precision.ui preferences.ui simplefunctionedit.ui \
+ 	unitedit.ui units.ui unknownedit.ui variableedit.ui variables.ui flags.gresource.xml ui.gresource.xml \
+-	rpn-swap-symbolic-16.png rpn-swap-symbolic-24.png rpn-swap-symbolic-32.png rpn-swap-symbolic-48.png \
+-	rpn-swap-symbolic-64.png rpn-swap-symbolic.svg flags/*.png
++	flags/*.png
+ 
+ # this is for gnome
+ 
+@@ -21,14 +22,10 @@ appdata_DATA = $(appdata_IN_FILES:.xml.in=.xml)
+ appdatadir = $(datadir)/metainfo
+ @INTLTOOL_XML_RULE@
+ 
+-pixmapsdir = $(datadir)/pixmaps
+-pixmaps_DATA = qalculate.png
+-
+ dist_man_MANS = qalculate-gtk.1
+ 
+ EXTRA_DIST = \
+ 	$(desktop_IN_FILES)	\
+ 	$(appdata_IN_FILES)	\
+-	$(pixmaps_DATA) \
+ 	$(noinst_DATA)
+ 
+diff --git a/data/icons/16x16/Makefile.am b/data/icons/16x16/Makefile.am
+new file mode 100644
+index 0000000..6defd00
+--- /dev/null
++++ b/data/icons/16x16/Makefile.am
+@@ -0,0 +1,5 @@
++pixmapsdir = $(datadir)/icons/hicolor/16x16/apps
++pixmaps_DATA = qalculate.png
++
++EXTRA_DIST = rpn-swap-symbolic.png $(pixmaps_DATA)
++
+diff --git a/data/qalculate16.png b/data/icons/16x16/qalculate.png
+similarity index 100%
+rename from data/qalculate16.png
+rename to data/icons/16x16/qalculate.png
+diff --git a/data/rpn-swap-symbolic-16.png b/data/icons/16x16/rpn-swap-symbolic.png
+similarity index 100%
+rename from data/rpn-swap-symbolic-16.png
+rename to data/icons/16x16/rpn-swap-symbolic.png
+diff --git a/data/icons/22x22/Makefile.am b/data/icons/22x22/Makefile.am
+new file mode 100644
+index 0000000..cf71937
+--- /dev/null
++++ b/data/icons/22x22/Makefile.am
+@@ -0,0 +1,5 @@
++pixmapsdir = $(datadir)/icons/hicolor/22x22/apps
++pixmaps_DATA = qalculate.png
++
++EXTRA_DIST = $(pixmaps_DATA)
++
+diff --git a/data/qalculate22.png b/data/icons/22x22/qalculate.png
+similarity index 100%
+rename from data/qalculate22.png
+rename to data/icons/22x22/qalculate.png
+diff --git a/data/icons/24x24/Makefile.am b/data/icons/24x24/Makefile.am
+new file mode 100644
+index 0000000..eaff26f
+--- /dev/null
++++ b/data/icons/24x24/Makefile.am
+@@ -0,0 +1,5 @@
++pixmapsdir = $(datadir)/icons/hicolor/24x24/apps
++pixmaps_DATA = qalculate.png
++
++EXTRA_DIST = rpn-swap-symbolic.png $(pixmaps_DATA)
++
+diff --git a/data/qalculate24.png b/data/icons/24x24/qalculate.png
+similarity index 100%
+rename from data/qalculate24.png
+rename to data/icons/24x24/qalculate.png
+diff --git a/data/rpn-swap-symbolic-24.png b/data/icons/24x24/rpn-swap-symbolic.png
+similarity index 100%
+rename from data/rpn-swap-symbolic-24.png
+rename to data/icons/24x24/rpn-swap-symbolic.png
+diff --git a/data/icons/256x256/Makefile.am b/data/icons/256x256/Makefile.am
+new file mode 100644
+index 0000000..60023a1
+--- /dev/null
++++ b/data/icons/256x256/Makefile.am
+@@ -0,0 +1,5 @@
++pixmapsdir = $(datadir)/icons/hicolor/256x256/apps
++pixmaps_DATA = qalculate.png
++
++EXTRA_DIST = $(pixmaps_DATA)
++
+diff --git a/data/qalculate256.png b/data/icons/256x256/qalculate.png
+similarity index 100%
+rename from data/qalculate256.png
+rename to data/icons/256x256/qalculate.png
+diff --git a/data/icons/32x32/Makefile.am b/data/icons/32x32/Makefile.am
+new file mode 100644
+index 0000000..ad57756
+--- /dev/null
++++ b/data/icons/32x32/Makefile.am
+@@ -0,0 +1,5 @@
++pixmapsdir = $(datadir)/icons/hicolor/32x32/apps
++pixmaps_DATA = qalculate.png
++
++EXTRA_DIST = rpn-swap-symbolic.png $(pixmaps_DATA)
++
+diff --git a/data/qalculate32.png b/data/icons/32x32/qalculate.png
+similarity index 100%
+rename from data/qalculate32.png
+rename to data/icons/32x32/qalculate.png
+diff --git a/data/rpn-swap-symbolic-32.png b/data/icons/32x32/rpn-swap-symbolic.png
+similarity index 100%
+rename from data/rpn-swap-symbolic-32.png
+rename to data/icons/32x32/rpn-swap-symbolic.png
+diff --git a/data/icons/48x48/Makefile.am b/data/icons/48x48/Makefile.am
+new file mode 100644
+index 0000000..94a49a3
+--- /dev/null
++++ b/data/icons/48x48/Makefile.am
+@@ -0,0 +1,5 @@
++pixmapsdir = $(datadir)/icons/hicolor/48x48/apps
++pixmaps_DATA = qalculate.png
++
++EXTRA_DIST = rpn-swap-symbolic.png $(pixmaps_DATA)
++
+diff --git a/data/qalculate48.png b/data/icons/48x48/qalculate.png
+similarity index 100%
+rename from data/qalculate48.png
+rename to data/icons/48x48/qalculate.png
+diff --git a/data/rpn-swap-symbolic-48.png b/data/icons/48x48/rpn-swap-symbolic.png
+similarity index 100%
+rename from data/rpn-swap-symbolic-48.png
+rename to data/icons/48x48/rpn-swap-symbolic.png
+diff --git a/data/icons/64x64/Makefile.am b/data/icons/64x64/Makefile.am
+new file mode 100644
+index 0000000..46b39f5
+--- /dev/null
++++ b/data/icons/64x64/Makefile.am
+@@ -0,0 +1,5 @@
++pixmapsdir = $(datadir)/icons/hicolor/64x64/apps
++pixmaps_DATA = qalculate.png
++
++EXTRA_DIST = rpn-swap-symbolic.png $(pixmaps_DATA)
++
+diff --git a/data/qalculate.png b/data/icons/64x64/qalculate.png
+similarity index 100%
+rename from data/qalculate.png
+rename to data/icons/64x64/qalculate.png
+diff --git a/data/rpn-swap-symbolic-64.png b/data/icons/64x64/rpn-swap-symbolic.png
+similarity index 100%
+rename from data/rpn-swap-symbolic-64.png
+rename to data/icons/64x64/rpn-swap-symbolic.png
+diff --git a/data/icons/Makefile.am b/data/icons/Makefile.am
+new file mode 100644
+index 0000000..81db07e
+--- /dev/null
++++ b/data/icons/Makefile.am
+@@ -0,0 +1,14 @@
++SUBDIRS = 16x16 22x22 24x24 32x32 48x48 64x64 256x256 scalable
++
++gtk_update_icon_cache = gtk-update-icon-cache -f -t $(datadir)/icons/hicolor
++
++install-data-hook: update-icon-cache
++uninstall-hook: update-icon-cache
++update-icon-cache:
++	@-if test -z "$(DESTDIR)"; then \
++		echo "Updating Gtk icon cache."; \
++		$(gtk_update_icon_cache); \
++	else \
++		echo "*** Icon cache not updated.  After (un)install, run this:"; \
++		echo "***   $(gtk_update_icon_cache)"; \
++	fi
+diff --git a/data/icons/scalable/Makefile.am b/data/icons/scalable/Makefile.am
+new file mode 100644
+index 0000000..26f0e3d
+--- /dev/null
++++ b/data/icons/scalable/Makefile.am
+@@ -0,0 +1,5 @@
++pixmapsdir = $(datadir)/icons/hicolor/scalable/apps
++pixmaps_DATA = qalculate.svg
++
++EXTRA_DIST = rpn-swap-symbolic.svg $(pixmaps_DATA)
++
+diff --git a/data/icons/scalable/qalculate.svg b/data/icons/scalable/qalculate.svg
+new file mode 100644
+index 0000000..bbfae30
+--- /dev/null
++++ b/data/icons/scalable/qalculate.svg
+@@ -0,0 +1,259 @@
++<?xml version="1.0" encoding="UTF-8" standalone="no"?>
++<!-- Created with Inkscape (http://www.inkscape.org/) -->
++
++<svg
++   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
++   xmlns:dc="http://purl.org/dc/elements/1.1/"
++   xmlns:cc="http://creativecommons.org/ns#"
++   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
++   xmlns:svg="http://www.w3.org/2000/svg"
++   xmlns="http://www.w3.org/2000/svg"
++   xmlns:xlink="http://www.w3.org/1999/xlink"
++   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
++   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
++   width="256"
++   height="256"
++   viewBox="0 0 67.733332 67.733335"
++   version="1.1"
++   id="svg8"
++   inkscape:version="0.92.4 5da689c313, 2019-01-14"
++   sodipodi:docname="qalculate.svg"
++   inkscape:export-filename="/home/hanna/Utveckling/qalculate-gtk/data/qalculate48.png"
++   inkscape:export-xdpi="18"
++   inkscape:export-ydpi="18">
++  <defs
++     id="defs2">
++    <linearGradient
++       id="linearGradient2393"
++       osb:paint="solid">
++      <stop
++         style="stop-color:#000000;stop-opacity:1;"
++         offset="0"
++         id="stop2391" />
++    </linearGradient>
++    <linearGradient
++       id="linearGradient2355"
++       osb:paint="solid">
++      <stop
++         style="stop-color:#c60091;stop-opacity:1;"
++         offset="0"
++         id="stop2353" />
++    </linearGradient>
++    <linearGradient
++       inkscape:collect="always"
++       id="linearGradient4731">
++      <stop
++         style="stop-color:#c60091;stop-opacity:1;"
++         offset="0"
++         id="stop4727" />
++      <stop
++         style="stop-color:#fcffff;stop-opacity:1"
++         offset="1"
++         id="stop4729" />
++    </linearGradient>
++    <linearGradient
++       inkscape:collect="always"
++       id="linearGradient4513">
++      <stop
++         style="stop-color:#000000;stop-opacity:1;"
++         offset="0"
++         id="stop4509" />
++      <stop
++         style="stop-color:#000000;stop-opacity:0;"
++         offset="1"
++         id="stop4511" />
++    </linearGradient>
++    <radialGradient
++       inkscape:collect="always"
++       xlink:href="#linearGradient4731"
++       id="radialGradient4725"
++       cx="26.510698"
++       cy="263.93103"
++       fx="26.510698"
++       fy="263.93103"
++       r="23.805611"
++       gradientTransform="matrix(4.4050259,2.1449686,-1.1175567,2.295076,204.68826,-398.67535)"
++       gradientUnits="userSpaceOnUse" />
++    <linearGradient
++       inkscape:collect="always"
++       xlink:href="#linearGradient4513"
++       id="linearGradient4745"
++       x1="27.686754"
++       y1="254.67148"
++       x2="13.037364"
++       y2="247.24788"
++       gradientUnits="userSpaceOnUse"
++       gradientTransform="translate(2.3812494,18.898809)" />
++    <linearGradient
++       id="linearGradient4715"
++       inkscape:collect="always">
++      <stop
++         id="stop4711"
++         offset="0"
++         style="stop-color:#000000;stop-opacity:1;" />
++      <stop
++         id="stop4713"
++         offset="1"
++         style="stop-color:#000000;stop-opacity:0.00972763" />
++    </linearGradient>
++    <linearGradient
++       gradientTransform="translate(-5.5134308,5.6090821)"
++       inkscape:collect="always"
++       xlink:href="#linearGradient4715"
++       id="linearGradient4757"
++       x1="36.758183"
++       y1="257.69528"
++       x2="2.7474875"
++       y2="239.76434"
++       gradientUnits="userSpaceOnUse" />
++    <linearGradient
++       gradientTransform="translate(0.05893596,-7.7145789)"
++       inkscape:collect="always"
++       xlink:href="#linearGradient4513"
++       id="linearGradient4772"
++       x1="36.040894"
++       y1="256.62622"
++       x2="-6.4408855"
++       y2="247.5587"
++       gradientUnits="userSpaceOnUse" />
++    <radialGradient
++       inkscape:collect="always"
++       xlink:href="#linearGradient4731"
++       id="radialGradient875"
++       cx="26.510698"
++       cy="263.93103"
++       fx="26.510698"
++       fy="263.93103"
++       r="23.805611"
++       gradientTransform="matrix(4.4050259,2.1449686,-1.1175567,2.295076,204.68826,-398.67535)"
++       gradientUnits="userSpaceOnUse" />
++    <linearGradient
++       inkscape:collect="always"
++       xlink:href="#linearGradient4731"
++       id="linearGradient2403"
++       x1="59.049698"
++       y1="277.68317"
++       x2="57.49062"
++       y2="183.33702"
++       gradientUnits="userSpaceOnUse"
++       gradientTransform="translate(4.2763124,0.80180856)" />
++    <linearGradient
++       gradientTransform="matrix(1.1275365,0,0,1.1275368,-3.8675593,-45.074577)"
++       inkscape:collect="always"
++       xlink:href="#linearGradient4513"
++       id="linearGradient4515-82"
++       x1="36.040894"
++       y1="256.62622"
++       x2="-6.4408855"
++       y2="247.5587"
++       gradientUnits="userSpaceOnUse" />
++    <linearGradient
++       gradientTransform="matrix(1.1275365,0,0,1.1275368,-101.94202,-72.010281)"
++       inkscape:collect="always"
++       xlink:href="#linearGradient4513"
++       id="linearGradient2417"
++       x1="36.040894"
++       y1="256.62622"
++       x2="-6.4408855"
++       y2="247.5587"
++       gradientUnits="userSpaceOnUse" />
++  </defs>
++  <sodipodi:namedview
++     id="base"
++     pagecolor="#ffffff"
++     bordercolor="#666666"
++     borderopacity="1.0"
++     inkscape:pageopacity="0.0"
++     inkscape:pageshadow="2"
++     inkscape:zoom="0.9899495"
++     inkscape:cx="102.7819"
++     inkscape:cy="235.98449"
++     inkscape:document-units="mm"
++     inkscape:current-layer="layer1"
++     showgrid="false"
++     units="px"
++     inkscape:pagecheckerboard="true" />
++  <metadata
++     id="metadata5">
++    <rdf:RDF>
++      <cc:Work
++         rdf:about="">
++        <dc:format>image/svg+xml</dc:format>
++        <dc:type
++           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
++        <dc:title></dc:title>
++        <cc:license
++           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
++      </cc:Work>
++      <cc:License
++         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
++        <cc:permits
++           rdf:resource="http://creativecommons.org/ns#Reproduction" />
++        <cc:permits
++           rdf:resource="http://creativecommons.org/ns#Distribution" />
++        <cc:permits
++           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
++      </cc:License>
++    </rdf:RDF>
++  </metadata>
++  <g
++     inkscape:label="Layer 1"
++     inkscape:groupmode="layer"
++     id="layer1"
++     transform="translate(0,-229.26665)">
++    <path
++       style="opacity:1;fill:#bfd2f7;fill-opacity:0.5330739;stroke:none;stroke-width:0.11794423;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
++       id="path4501"
++       sodipodi:type="arc"
++       sodipodi:cx="26.349831"
++       sodipodi:cy="260.1535"
++       sodipodi:rx="17.216925"
++       sodipodi:ry="22.122177"
++       sodipodi:start="0"
++       sodipodi:end="6.1720047"
++       d="M 43.566755,260.1535 A 17.216925,22.122177 0 0 1 26.828316,282.26714 17.216925,22.122177 0 0 1 9.1595017,261.38265 17.216925,22.122177 0 0 1 24.915853,238.10819 17.216925,22.122177 0 0 1 43.460455,257.69901"
++       sodipodi:open="true" />
++    <text
++       xml:space="preserve"
++       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:74.08333588px;line-height:6.61458302px;font-family:MACGrande;-inkscape-font-specification:'MACGrande, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:url(#radialGradient4725);fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
++       x="-1.2567708"
++       y="285.56622"
++       id="text4491"><tspan
++         sodipodi:role="line"
++         id="tspan4489"
++         x="-1.2567708"
++         y="285.56622"
++         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70.55555725px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#radialGradient4725);fill-opacity:1;stroke-width:0.26458332px">Q</tspan></text>
++    <text
++       xml:space="preserve"
++       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:74.08333588px;line-height:6.61458349px;font-family:MACGrande;-inkscape-font-specification:'MACGrande, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2403);fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
++       x="48.671623"
++       y="287.8992"
++       id="text4491-9"
++       inkscape:export-xdpi="96"
++       inkscape:export-ydpi="96"><tspan
++         sodipodi:role="line"
++         id="tspan4489-9"
++         x="48.671623"
++         y="287.8992"
++         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:81.1388855px;font-family:'Frutiger Next Pro';-inkscape-font-specification:'Frutiger Next Pro, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2403);fill-opacity:1;stroke-width:0.26458332px">!</tspan></text>
++    <text
++       xml:space="preserve"
++       style="font-style:normal;font-weight:normal;font-size:8.20400333px;line-height:7.45818472px;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient4515-82);fill-opacity:1;stroke:none;stroke-width:0.29832739px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
++       x="19.039722"
++       y="245.58742"
++       id="text4507-3"
++       transform="scale(0.92871508,1.0767565)"
++       inkscape:export-xdpi="18"
++       inkscape:export-ydpi="18"><tspan
++         sodipodi:role="line"
++         x="19.039722"
++         y="245.58742"
++         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.70631599px;font-family:'Sabon Next LT Pro';-inkscape-font-specification:'Sabon Next LT Pro, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient4515-82);fill-opacity:1;stroke-width:0.29832739px"
++         id="tspan4719"><tspan
++           style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.75524139px;font-family:'Sabon Next LT Pro';-inkscape-font-specification:'Sabon Next LT Pro, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient4515-82);stroke-width:0.29832739px"
++           id="tspan905">f</tspan><tspan
++           style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14.68221951px;font-family:'Sabon Next LT Pro';-inkscape-font-specification:'Sabon Next LT Pro, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient4515-82);stroke-width:0.29832739px"
++           id="tspan903">(x)</tspan></tspan></text>
++  </g>
++</svg>
+diff --git a/data/icons/scalable/qalculate256.svg b/data/icons/scalable/qalculate256.svg
+new file mode 100644
+index 0000000..7f17f4c
+--- /dev/null
++++ b/data/icons/scalable/qalculate256.svg
+@@ -0,0 +1,309 @@
++<?xml version="1.0" encoding="UTF-8" standalone="no"?>
++<!-- Created with Inkscape (http://www.inkscape.org/) -->
++
++<svg
++   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
++   xmlns:dc="http://purl.org/dc/elements/1.1/"
++   xmlns:cc="http://creativecommons.org/ns#"
++   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
++   xmlns:svg="http://www.w3.org/2000/svg"
++   xmlns="http://www.w3.org/2000/svg"
++   xmlns:xlink="http://www.w3.org/1999/xlink"
++   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
++   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
++   width="256"
++   height="256"
++   viewBox="0 0 67.733332 67.733335"
++   version="1.1"
++   id="svg8"
++   inkscape:version="0.92.4 5da689c313, 2019-01-14"
++   sodipodi:docname="qalculate256.svg"
++   inkscape:export-filename="/home/hanna/Utveckling/qalculate-gtk/data/qalculate256.png"
++   inkscape:export-xdpi="96.000008"
++   inkscape:export-ydpi="96.000008">
++  <defs
++     id="defs2">
++    <linearGradient
++       id="linearGradient2393"
++       osb:paint="solid">
++      <stop
++         style="stop-color:#000000;stop-opacity:1;"
++         offset="0"
++         id="stop2391" />
++    </linearGradient>
++    <linearGradient
++       id="linearGradient2355"
++       osb:paint="solid">
++      <stop
++         style="stop-color:#c60091;stop-opacity:1;"
++         offset="0"
++         id="stop2353" />
++    </linearGradient>
++    <linearGradient
++       inkscape:collect="always"
++       id="linearGradient4731">
++      <stop
++         style="stop-color:#c60091;stop-opacity:1;"
++         offset="0"
++         id="stop4727" />
++      <stop
++         style="stop-color:#fcffff;stop-opacity:1"
++         offset="1"
++         id="stop4729" />
++    </linearGradient>
++    <linearGradient
++       inkscape:collect="always"
++       id="linearGradient4513">
++      <stop
++         style="stop-color:#000000;stop-opacity:1;"
++         offset="0"
++         id="stop4509" />
++      <stop
++         style="stop-color:#000000;stop-opacity:0;"
++         offset="1"
++         id="stop4511" />
++    </linearGradient>
++    <radialGradient
++       inkscape:collect="always"
++       xlink:href="#linearGradient4731"
++       id="radialGradient4725"
++       cx="26.510698"
++       cy="263.93103"
++       fx="26.510698"
++       fy="263.93103"
++       r="23.805611"
++       gradientTransform="matrix(4.4050259,2.1449686,-1.1175567,2.295076,204.68826,-398.67535)"
++       gradientUnits="userSpaceOnUse" />
++    <linearGradient
++       inkscape:collect="always"
++       xlink:href="#linearGradient4513"
++       id="linearGradient4515"
++       x1="27.686754"
++       y1="254.67148"
++       x2="13.037364"
++       y2="247.24788"
++       gradientUnits="userSpaceOnUse"
++       gradientTransform="translate(6.7987769,-5.2748979)" />
++    <linearGradient
++       inkscape:collect="always"
++       xlink:href="#linearGradient4513"
++       id="linearGradient4745"
++       x1="27.686754"
++       y1="254.67148"
++       x2="13.037364"
++       y2="247.24788"
++       gradientUnits="userSpaceOnUse"
++       gradientTransform="translate(2.3812494,18.898809)" />
++    <linearGradient
++       gradientTransform="translate(6.3876427,6.0241704)"
++       inkscape:collect="always"
++       xlink:href="#linearGradient4715"
++       id="linearGradient4515-3"
++       x1="36.758183"
++       y1="257.69528"
++       x2="2.7474875"
++       y2="239.76434"
++       gradientUnits="userSpaceOnUse" />
++    <linearGradient
++       id="linearGradient4715"
++       inkscape:collect="always">
++      <stop
++         id="stop4711"
++         offset="0"
++         style="stop-color:#000000;stop-opacity:1;" />
++      <stop
++         id="stop4713"
++         offset="1"
++         style="stop-color:#000000;stop-opacity:0.00972763" />
++    </linearGradient>
++    <linearGradient
++       gradientTransform="translate(-5.5134308,5.6090821)"
++       inkscape:collect="always"
++       xlink:href="#linearGradient4715"
++       id="linearGradient4757"
++       x1="36.758183"
++       y1="257.69528"
++       x2="2.7474875"
++       y2="239.76434"
++       gradientUnits="userSpaceOnUse" />
++    <linearGradient
++       gradientTransform="translate(-4.0761615,11.676647)"
++       inkscape:collect="always"
++       xlink:href="#linearGradient4513"
++       id="linearGradient4515-82-7"
++       x1="36.040894"
++       y1="256.62622"
++       x2="-6.4408855"
++       y2="247.5587"
++       gradientUnits="userSpaceOnUse" />
++    <linearGradient
++       gradientTransform="translate(0.05893596,-7.7145789)"
++       inkscape:collect="always"
++       xlink:href="#linearGradient4513"
++       id="linearGradient4772"
++       x1="36.040894"
++       y1="256.62622"
++       x2="-6.4408855"
++       y2="247.5587"
++       gradientUnits="userSpaceOnUse" />
++    <linearGradient
++       inkscape:collect="always"
++       xlink:href="#linearGradient4513"
++       id="linearGradient4515-9"
++       x1="27.686754"
++       y1="254.67148"
++       x2="13.037364"
++       y2="247.24788"
++       gradientUnits="userSpaceOnUse"
++       gradientTransform="translate(-1.6878683,-0.05093789)" />
++    <radialGradient
++       inkscape:collect="always"
++       xlink:href="#linearGradient4731"
++       id="radialGradient875"
++       cx="26.510698"
++       cy="263.93103"
++       fx="26.510698"
++       fy="263.93103"
++       r="23.805611"
++       gradientTransform="matrix(4.4050259,2.1449686,-1.1175567,2.295076,204.68826,-398.67535)"
++       gradientUnits="userSpaceOnUse" />
++    <linearGradient
++       inkscape:collect="always"
++       xlink:href="#linearGradient4731"
++       id="linearGradient2403"
++       x1="59.049698"
++       y1="277.68317"
++       x2="57.49062"
++       y2="183.33702"
++       gradientUnits="userSpaceOnUse"
++       gradientTransform="translate(4.2763124,0.80180856)" />
++  </defs>
++  <sodipodi:namedview
++     id="base"
++     pagecolor="#ffffff"
++     bordercolor="#666666"
++     borderopacity="1.0"
++     inkscape:pageopacity="0.0"
++     inkscape:pageshadow="2"
++     inkscape:zoom="0.9899495"
++     inkscape:cx="-229.05321"
++     inkscape:cy="231.94388"
++     inkscape:document-units="mm"
++     inkscape:current-layer="layer1"
++     showgrid="false"
++     units="px"
++     inkscape:pagecheckerboard="true" />
++  <metadata
++     id="metadata5">
++    <rdf:RDF>
++      <cc:Work
++         rdf:about="">
++        <dc:format>image/svg+xml</dc:format>
++        <dc:type
++           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
++        <dc:title></dc:title>
++        <cc:license
++           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
++      </cc:Work>
++      <cc:License
++         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
++        <cc:permits
++           rdf:resource="http://creativecommons.org/ns#Reproduction" />
++        <cc:permits
++           rdf:resource="http://creativecommons.org/ns#Distribution" />
++        <cc:permits
++           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
++      </cc:License>
++    </rdf:RDF>
++  </metadata>
++  <g
++     inkscape:label="Layer 1"
++     inkscape:groupmode="layer"
++     id="layer1"
++     transform="translate(0,-229.26665)">
++    <path
++       style="opacity:1;fill:#bfd2f7;fill-opacity:0.5330739;stroke:none;stroke-width:0.11794423;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
++       id="path4501"
++       sodipodi:type="arc"
++       sodipodi:cx="26.349831"
++       sodipodi:cy="260.1535"
++       sodipodi:rx="17.216925"
++       sodipodi:ry="22.122177"
++       sodipodi:start="0"
++       sodipodi:end="6.1720047"
++       d="M 43.566755,260.1535 A 17.216925,22.122177 0 0 1 26.828316,282.26714 17.216925,22.122177 0 0 1 9.1595017,261.38265 17.216925,22.122177 0 0 1 24.915853,238.10819 17.216925,22.122177 0 0 1 43.460455,257.69901"
++       sodipodi:open="true" />
++    <text
++       xml:space="preserve"
++       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:74.08333588px;line-height:6.61458302px;font-family:MACGrande;-inkscape-font-specification:'MACGrande, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:url(#radialGradient4725);fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
++       x="-1.2567708"
++       y="285.56622"
++       id="text4491"><tspan
++         sodipodi:role="line"
++         id="tspan4489"
++         x="-1.2567708"
++         y="285.56622"
++         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70.55555725px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#radialGradient4725);fill-opacity:1;stroke-width:0.26458332px">Q</tspan></text>
++    <text
++       xml:space="preserve"
++       style="font-style:normal;font-weight:normal;font-size:7.27604151px;line-height:6.61458349px;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient4515);fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
++       x="27.11499"
++       y="252.51006"
++       id="text4507"><tspan
++         sodipodi:role="line"
++         id="tspan4505"
++         x="27.11499"
++         y="252.51006"
++         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient4515);fill-opacity:1;stroke-width:0.26458332px">€</tspan></text>
++    <text
++       xml:space="preserve"
++       style="font-style:normal;font-weight:normal;font-size:7.27604151px;line-height:6.61458349px;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient4515-3);fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
++       x="26.703861"
++       y="263.80908"
++       id="text4507-2"><tspan
++         sodipodi:role="line"
++         id="tspan4505-3"
++         x="26.703861"
++         y="263.80908"
++         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:7.05555534px;font-family:'Noto Serif';-inkscape-font-specification:'Noto Serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient4515-3);fill-opacity:1;stroke-width:0.26458332px">123</tspan></text>
++    <text
++       xml:space="preserve"
++       style="font-style:normal;font-weight:normal;font-size:7.27604151px;line-height:6.61458349px;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient4515-82-7);fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
++       x="16.240051"
++       y="269.46164"
++       id="text4507-3-0"><tspan
++         sodipodi:role="line"
++         id="tspan4505-0"
++         x="16.240051"
++         y="269.46164"
++         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.58333302px;font-family:'Sabon Next LT Pro';-inkscape-font-specification:'Sabon Next LT Pro, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient4515-82-7);fill-opacity:1;stroke-width:0.26458332px"><tspan
++           style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.52499962px;font-family:'Sabon Next LT Pro';-inkscape-font-specification:'Sabon Next LT Pro, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient4515-82-7);stroke-width:0.26458332px"
++           id="tspan4628"><tspan
++   style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:16.58055496px;font-family:'Sabon Next LT Pro';-inkscape-font-specification:'Sabon Next LT Pro, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient4515-82-7)"
++   id="tspan858">∫</tspan>x</tspan></tspan></text>
++    <text
++       xml:space="preserve"
++       style="font-style:normal;font-weight:normal;font-size:7.27604151px;line-height:6.61458349px;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient4515-9);fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
++       x="18.628344"
++       y="257.73404"
++       id="text4507-27"><tspan
++         sodipodi:role="line"
++         id="tspan4505-2"
++         x="18.628344"
++         y="257.73404"
++         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.34722233px;font-family:'Noto Serif';-inkscape-font-specification:'Noto Serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient4515-9);fill-opacity:1;stroke-width:0.26458332px">=</tspan></text>
++    <text
++       xml:space="preserve"
++       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:74.08333588px;line-height:6.61458349px;font-family:MACGrande;-inkscape-font-specification:'MACGrande, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2403);fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
++       x="48.671623"
++       y="287.8992"
++       id="text4491-9"
++       inkscape:export-xdpi="96"
++       inkscape:export-ydpi="96"><tspan
++         sodipodi:role="line"
++         id="tspan4489-9"
++         x="48.671623"
++         y="287.8992"
++         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:81.1388855px;font-family:'Frutiger Next Pro';-inkscape-font-specification:'Frutiger Next Pro, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2403);fill-opacity:1;stroke-width:0.26458332px">!</tspan></text>
++  </g>
++</svg>
+diff --git a/data/rpn-swap-symbolic.svg b/data/icons/scalable/rpn-swap-symbolic.svg
+similarity index 100%
+rename from data/rpn-swap-symbolic.svg
+rename to data/icons/scalable/rpn-swap-symbolic.svg
+diff --git a/data/qalculate128.png b/data/qalculate128.png
+deleted file mode 100644
+index acf3a598f008cb8e9657b77e753ac683300fe393..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 11202
+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
+
+diff --git a/data/qalculate64.png b/data/qalculate64.png
+deleted file mode 100644
+index 1e482a4f1906db0d0ab7c38c65d5e70da625e574..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 4558
+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
+
+diff --git a/data/ui.gresource.xml b/data/ui.gresource.xml
+index 6bf9243..788aaca 100644
+--- a/data/ui.gresource.xml
++++ b/data/ui.gresource.xml
+@@ -30,11 +30,11 @@
+ 		<file preprocess="xml-stripblanks">variables.ui</file>
+ 	</gresource>
+ 	<gresource prefix="/qalculate-gtk/icons">
+-		<file alias="scalable/actions/rpn-swap-symbolic.svg">rpn-swap-symbolic.svg</file>
+-		<file alias="16x16/actions/rpn-swap-symbolic.symbolic.png">rpn-swap-symbolic-16.png</file>
+-		<file alias="24x24/actions/rpn-swap-symbolic.symbolic.png">rpn-swap-symbolic-24.png</file>
+-		<file alias="32x32/actions/rpn-swap-symbolic.symbolic.png">rpn-swap-symbolic-32.png</file>
+-		<file alias="48x48/actions/rpn-swap-symbolic.symbolic.png">rpn-swap-symbolic-48.png</file>
+-		<file alias="64x64/actions/rpn-swap-symbolic.symbolic.png">rpn-swap-symbolic-64.png</file>
++		<file alias="scalable/actions/rpn-swap-symbolic.svg">icons/scalable/rpn-swap-symbolic.svg</file>
++		<file alias="16x16/actions/rpn-swap-symbolic.symbolic.png">icons/16x16/rpn-swap-symbolic.png</file>
++		<file alias="24x24/actions/rpn-swap-symbolic.symbolic.png">icons/24x24/rpn-swap-symbolic.png</file>
++		<file alias="32x32/actions/rpn-swap-symbolic.symbolic.png">icons/32x32/rpn-swap-symbolic.png</file>
++		<file alias="48x48/actions/rpn-swap-symbolic.symbolic.png">icons/48x48/rpn-swap-symbolic.png</file>
++		<file alias="64x64/actions/rpn-swap-symbolic.symbolic.png">icons/64x64/rpn-swap-symbolic.png</file>
+ 	</gresource>
+ </gresources>
