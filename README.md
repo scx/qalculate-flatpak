@@ -44,11 +44,11 @@ See also:
 ### Prepare
 
 ```
-$ flatpak install "flathub" "org.gnome.Sdk//3.34"
+$ flatpak --user install "flathub" "org.gnome.Sdk//3.34"
 ```
 
 ```
-$ flatpak install "flathub" "org.gnome.Platform//3.34"
+$ flatpak --user install "flathub" "org.gnome.Platform//3.34"
 ```
 
 Clone this repository, then checkout the right branch.
@@ -98,7 +98,7 @@ $ flatpak --user install "qalculate-gtk" "io.github.qalculate.Qalculate"
 ### Run
 
 ```
-$ flatpak run "io.github.qalculate.Qalculate"
+$ flatpak --user run "io.github.qalculate.Qalculate"
 ```
 
 ### Uninstall
