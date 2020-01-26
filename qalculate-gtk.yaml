@@ -5,12 +5,36 @@ config-opts:
   - --enable-maintainer-mode
 sources:
   - type: archive
-    url: https://github.com/Qalculate/qalculate-gtk/releases/download/v3.6.0/qalculate-gtk-3.6.0.tar.gz
-    sha256: 1196bb7aee0df611cc07e1435b270344cfaced6cc7dd9dca7aedc8513168ce6e
+    url: https://github.com/Qalculate/qalculate-gtk/releases/download/v3.7.0/qalculate-gtk-3.7.0.tar.gz
+    sha256: 3d83c2abf3d32ef334f7d290b178757b281407aa4f93c9a0131f4b70cfa0dfa7
   # There is only 64x64 PNG icon in the above archive.
   - type: file
-    url: https://raw.githubusercontent.com/Qalculate/qalculate-gtk/v3.6.0/data/qalculate.ico
-    sha256: 27902c8cb7182af9a585628f2f7ee682148b05e3083a14f842638e14a51b9be5
+    url: https://raw.githubusercontent.com/Qalculate/qalculate-gtk/v3.7.0b/data/qalculate256.png
+    sha256: eb458932d479835a5996b3c24eb7168ca44d8c5d69122d318375f0af0266bd57
+    dest: data
+  - type: file
+    url: https://raw.githubusercontent.com/Qalculate/qalculate-gtk/v3.7.0b/data/qalculate128.png
+    sha256: b5b39e823a1b3679cc8bdb7aab0a6e59d7f93565658237ad1c07d891cbf828a2
+    dest: data
+  - type: file
+    url: https://raw.githubusercontent.com/Qalculate/qalculate-gtk/v3.7.0b/data/qalculate48.png
+    sha256: 324935d501bc5cfc2a1df12e24adf239047951eb642d43a08b1994cda30eb786
+    dest: data
+  - type: file
+    url: https://raw.githubusercontent.com/Qalculate/qalculate-gtk/v3.7.0b/data/qalculate32.png
+    sha256: 17f86b99b6fe7e1499b3f758ee6673e4b39386e1c2cd6a9913b1100e195fefe2
+    dest: data
+  - type: file
+    url: https://raw.githubusercontent.com/Qalculate/qalculate-gtk/v3.7.0b/data/qalculate24.png
+    sha256: ac9eb40110adf18fb30ca81e79b09268925245019ab1cb4a5bc61e3dd3695a64
+    dest: data
+  - type: file
+    url: https://raw.githubusercontent.com/Qalculate/qalculate-gtk/v3.7.0b/data/qalculate22.png
+    sha256: 0b5fa884c81af69f6072630d1e90fcb0209fcd8d053fd71a5f3c4af107743bcb
+    dest: data
+  - type: file
+    url: https://raw.githubusercontent.com/Qalculate/qalculate-gtk/v3.7.0b/data/qalculate16.png
+    sha256: 3310f0d7a88a48ba58af2b3260223ea25d47c4cdeec6fa37883443abcd272727
     dest: data
   # Name (as GenericName) from gnome-calculator
   # GenericName from mate-calc
@@ -26,40 +50,20 @@ sources:
     commands:
       - cp -p /usr/share/automake-*/config.{sub,guess} .;
 post-install:
-  - mkdir "icons";
-    icotool -x -o "icons" "data/qalculate.ico";
-  - |
-    icon_in="$( find "icons" -mindepth 1 -maxdepth 1 -xtype f -name 'qalculate_*_256x256x32.png' | sort -V | tail -n 1 )";
-    icon_out="qalculate.png";
-    for s in {72,96,128,192}; do
-      convert -background none -density 1024 -resize "${s}x${s}" "${icon_in}" "${icon_out}";
-      install -p -D -m 0644 "${icon_out}" -t "${FLATPAK_DEST}/share/icons/hicolor/${s}x${s}/apps/";
-    done;
-    install -p -D -m 0644 "${icon_in}" "${FLATPAK_DEST}/share/icons/hicolor/256x256/apps/${icon_out}";
-  - |
-    icon_in="data/qalculate.png";
-    icon_out="qalculate.png";
-    for s in {36,48}; do
-      convert -background none -density 1024 -resize "${s}x${s}" "${icon_in}" "${icon_out}";
-      install -p -D -m 0644 "${icon_out}" -t "${FLATPAK_DEST}/share/icons/hicolor/${s}x${s}/apps/";
-    done;
-    install -p -D -m 0644 "${icon_in}" "${FLATPAK_DEST}/share/icons/hicolor/64x64/apps/${icon_out}";
-  - |
-    icon_in="$( find "icons" -mindepth 1 -maxdepth 1 -xtype f -name 'qalculate_*_32x32x32.png' | sort -V | tail -n 1 )";
-    icon_out="qalculate.png";
-    for s in {16,22,24}; do
-      convert -background none -density 1024 -resize "${s}x${s}" "${icon_in}" "${icon_out}";
-      install -p -D -m 0644 "${icon_out}" -t "${FLATPAK_DEST}/share/icons/hicolor/${s}x${s}/apps/";
-    done;
-    install -p -D -m 0644 "${icon_in}" "${FLATPAK_DEST}/share/icons/hicolor/32x32/apps/${icon_out}";
   - |
     cat "GenericName.txt" "Keywords.txt" | while IFS='=' read -r key value; do
       awk -F'=' -v "key=${key}" '$1 == key { found = 1; exit(0); } END { if (!found) exit(1); }' "${FLATPAK_DEST}/share/applications/qalculate-gtk.desktop" && continue;
       desktop-file-edit --set-key="${key}" --set-value="${value}" "${FLATPAK_DEST}/share/applications/qalculate-gtk.desktop";
     done;
   - install -p -D -m 0644 "COPYING" -t "${FLATPAK_DEST}/share/licenses/qalculate-gtk/";
+  - install -p -D -m 0644 "data/qalculate256.png" "${FLATPAK_DEST}/share/icons/hicolor/256x256/apps/qalculate.png";
+  - install -p -D -m 0644 "data/qalculate128.png" "${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/qalculate.png";
+  - install -p -D -m 0644 "data/qalculate.png" "${FLATPAK_DEST}/share/icons/hicolor/64x64/apps/qalculate.png";
+  - install -p -D -m 0644 "data/qalculate48.png" "${FLATPAK_DEST}/share/icons/hicolor/48x48/apps/qalculate.png";
+  - install -p -D -m 0644 "data/qalculate32.png" "${FLATPAK_DEST}/share/icons/hicolor/32x32/apps/qalculate.png";
+  - install -p -D -m 0644 "data/qalculate24.png" "${FLATPAK_DEST}/share/icons/hicolor/24x24/apps/qalculate.png";
+  - install -p -D -m 0644 "data/qalculate22.png" "${FLATPAK_DEST}/share/icons/hicolor/22x22/apps/qalculate.png";
+  - install -p -D -m 0644 "data/qalculate16.png" "${FLATPAK_DEST}/share/icons/hicolor/16x16/apps/qalculate.png";
 modules:
   - libqalculate.yaml
   - gnuplot.yaml
-  - icoutils.yaml
-  - ImageMagick.yaml
