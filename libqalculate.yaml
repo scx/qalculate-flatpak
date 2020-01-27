@@ -15,4 +15,3 @@ post-install:
 modules:
   - shared-modules/intltool/intltool-0.51.json
   - mpfr.yaml
-
