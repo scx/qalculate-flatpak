@@ -29,10 +29,10 @@ sources:
   - type: patch
     path: qalculate-gtk-3.7.0-icon-svg.patch
     use-git: true
-  # Add missing pixmap icon 
-  # https://github.com/Qalculate/qalculate-gtk/commit/a9fe7f80843161f6a80708f7078b3fae26b8ea45
+  # Fix about dialog logo
+  # https://github.com/Qalculate/qalculate-gtk/commit/f64eef8509af8dfe7a1fad1359b46edd81ebd83b
   - type: patch
-    path: qalculate-gtk-3.7.0-pixmap.patch
+    path: qalculate-gtk-3.7.0-icon-logo.patch
     use-git: true
   # Name (as GenericName) from gnome-calculator
   # GenericName from mate-calc
