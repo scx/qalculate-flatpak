@@ -53,7 +53,13 @@ post-install:
       awk -F'=' -v "key=${key}" '$1 == key { found = 1; exit(0); } END { if (!found) exit(1); }' "${FLATPAK_DEST}/share/applications/qalculate-gtk.desktop" && continue;
       desktop-file-edit --set-key="${key}" --set-value="${value}" "${FLATPAK_DEST}/share/applications/qalculate-gtk.desktop";
     done;
+  - |
+    for f in "${FLATPAK_DEST}/share/metainfo/qalculate-gtk.appdata.xml"; do
+      xmlstarlet ed --inplace -d '/component/provides/binary' "${f}";
+      xmlstarlet ed --inplace -d '/component/provides[not(./*) and (not(./text()) or normalize-space(./text())="")]' "${f}";
+    done;
   - install -p -D -m 0644 "COPYING" -t "${FLATPAK_DEST}/share/licenses/qalculate-gtk/";
 modules:
   - libqalculate.yaml
   - gnuplot.yaml
+  - xmlstarlet.yaml
