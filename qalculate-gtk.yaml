@@ -5,35 +5,9 @@ config-opts:
   - --enable-maintainer-mode
 sources:
   - type: archive
-    url: https://github.com/Qalculate/qalculate-gtk/releases/download/v3.7.0/qalculate-gtk-3.7.0.tar.gz
-    sha256: 3d83c2abf3d32ef334f7d290b178757b281407aa4f93c9a0131f4b70cfa0dfa7
+    url: https://github.com/Qalculate/qalculate-gtk/releases/download/v3.8.0/qalculate-gtk-3.8.0.tar.gz
+    sha256: 63e517db2cac7b3f5350d9e6f87bf34553f360795b1c67910f88b7a579574c95
     git-init: true
-  # There is only 64x64 PNG icon in the above archive.
-  # Add application icons in different sizes to repository
-  # https://github.com/Qalculate/qalculate-gtk/commit/6579045b3cb2fdc97bddea90894cf2c43fdaadfa
-  - type: patch
-    path: qalculate-gtk-3.7.0-icon.patch
-    use-git-am: true
-  # Install multiple icon sizes 
-  # https://github.com/Qalculate/qalculate-gtk/commit/7e7404c86f5b303e6cd6364f98da2d2280921d78
-  - type: patch
-    path: qalculate-gtk-3.7.0-icon-install.patch
-    use-git-am: true
-  # Add 128x128 application icon
-  # https://github.com/Qalculate/qalculate-gtk/commit/d668c7b9524328a2d66cbd1e5f557befc505452f
-  - type: patch
-    path: qalculate-gtk-3.7.0-icon-128.patch
-    use-git-am: true
-  # Fix fixed scalable application icons
-  # https://github.com/Qalculate/qalculate-gtk/commit/28437a77fced912401b114d7404364248df4becd
-  - type: patch
-    path: qalculate-gtk-3.7.0-icon-svg.patch
-    use-git: true
-  # Fix about dialog logo
-  # https://github.com/Qalculate/qalculate-gtk/commit/f64eef8509af8dfe7a1fad1359b46edd81ebd83b
-  - type: patch
-    path: qalculate-gtk-3.7.0-icon-logo.patch
-    use-git: true
   # Name (as GenericName) from gnome-calculator
   # GenericName from mate-calc
   # https://koji.fedoraproject.org/koji/buildinfo?buildID=1399423
