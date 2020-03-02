@@ -6,7 +6,7 @@ config-opts:
 sources:
   - type: archive
     url: https://github.com/Qalculate/qalculate-gtk/releases/download/v3.8.0/qalculate-gtk-3.8.0.tar.gz
-    sha256: 63e517db2cac7b3f5350d9e6f87bf34553f360795b1c67910f88b7a579574c95
+    sha256: 9a2abf5f5c06f6a3a58d41844de7a666d0304c0c261bc2acd1f64ed105a0cd5c
     git-init: true
   # Name (as GenericName) from gnome-calculator
   # GenericName from mate-calc
