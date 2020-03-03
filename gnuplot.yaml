@@ -6,7 +6,7 @@ config-opts:
   - --with-readline=gnu
   - --without-linux-vga
   - --without-qt
-  - --disable-wxwidgets
+  - --enable-wxwidgets
   - --enable-maintainer-mode
 sources:
   - type: archive
@@ -30,4 +30,5 @@ post-install:
 modules:
   - gd.yaml
   - libcerf.yaml
+  - wxwidgets.yaml
   - shared-modules/lua5.3/lua-5.3.5.json
