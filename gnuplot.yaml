@@ -3,7 +3,7 @@ config-opts:
   - --with-gd
   - --with-libcerf
   - --with-lua
-  - --with-readline=bsd
+  - --with-readline=gnu
   - --without-linux-vga
   - --without-qt
   - --disable-wxwidgets
