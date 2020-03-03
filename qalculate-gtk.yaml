@@ -7,7 +7,6 @@ sources:
   - type: archive
     url: https://github.com/Qalculate/qalculate-gtk/releases/download/v3.8.0/qalculate-gtk-3.8.0.tar.gz
     sha256: 9a2abf5f5c06f6a3a58d41844de7a666d0304c0c261bc2acd1f64ed105a0cd5c
-    git-init: true
   # Name (as GenericName) from gnome-calculator
   # GenericName from mate-calc
   # https://koji.fedoraproject.org/koji/buildinfo?buildID=1399423
@@ -29,6 +28,11 @@ post-install:
     done;
   - |
     for f in "${FLATPAK_DEST}/share/metainfo/qalculate-gtk.appdata.xml"; do
+      # The provides tag describes the public interfaces this program provides
+      # The binary tag is a child tag of the provides tag
+      # It provides the name of a binary installed into a location in PATH
+      # However, flatpak doesn't export any binaries on the host
+      # https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-provides
       xmlstarlet ed --inplace -d '/component/provides/binary' "${f}";
       xmlstarlet ed --inplace -d '/component/provides[not(./*) and (not(./text()) or normalize-space(./text())="")]' "${f}";
     done;
