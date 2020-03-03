@@ -2,6 +2,7 @@ name: gnuplot
 config-opts:
   - --with-gd
   - --with-libcerf
+  - --with-lua
   - --with-readline=bsd
   - --without-linux-vga
   - --without-qt
@@ -29,3 +30,4 @@ post-install:
 modules:
   - gd.yaml
   - libcerf.yaml
+  - shared-modules/lua5.3/lua-5.3.5.json
