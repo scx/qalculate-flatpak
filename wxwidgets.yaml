@@ -15,6 +15,7 @@ config-opts:
   - --disable-webkit
   - --disable-webview
   - --disable-ribbon
+  - --disable-gtktest
 sources:
   - type: archive
     url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.0.4/wxWidgets-3.0.4.tar.bz2
