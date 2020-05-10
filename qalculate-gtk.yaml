@@ -4,10 +4,11 @@ config-opts:
   - --disable-static
   - --enable-maintainer-mode
   - --with-webkitgtk
+  - --disable-gnome-search
 sources:
   - type: archive
-    url: https://github.com/Qalculate/qalculate-gtk/releases/download/v3.9.0/qalculate-gtk-3.9.0a.tar.gz
-    sha256: d8b16427a986d689aee73e6a4eaa0b9f5d3c703f03d5b4d4d334b5094093f3c8
+    url: https://github.com/Qalculate/qalculate-gtk/releases/download/v3.10.0/qalculate-gtk-3.10.0.tar.gz
+    sha256: e4c88a9d0750fdec863f287c82893ecb4349532cfb378d2cc690422b4584d65e
   # Name (as GenericName) from gnome-calculator
   # GenericName from mate-calc
   # https://koji.fedoraproject.org/koji/buildinfo?buildID=1399423

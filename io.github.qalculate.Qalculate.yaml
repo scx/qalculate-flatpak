@@ -34,7 +34,7 @@ finish-args:
   - --talk-name=org.gtk.vfs
   - --talk-name=org.gtk.vfs.*
   # Session Bus access
-  - --own-name=org.gtk.qalculate
+  - --own-name=io.github.Qalculate
   # OpenGL access
   - --device=dri
 modules:

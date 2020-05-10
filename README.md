@@ -44,11 +44,11 @@ See also:
 ### Prepare
 
 ```
-$ flatpak --user install "flathub" "org.gnome.Sdk//3.34"
+$ flatpak --user install "flathub" "org.gnome.Sdk//3.36"
 ```
 
 ```
-$ flatpak --user install "flathub" "org.gnome.Platform//3.34"
+$ flatpak --user install "flathub" "org.gnome.Platform//3.36"
 ```
 
 Clone this repository, then checkout the right branch.
