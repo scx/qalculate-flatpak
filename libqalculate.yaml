@@ -6,7 +6,7 @@ config-opts:
 sources:
   - type: archive
     url: https://github.com/Qalculate/libqalculate/releases/download/v3.10.0/libqalculate-3.10.0.tar.gz
-    sha256: e34890ad21e3ba0bb7f7988658fc2d38f813b3768f11a78fab977b386f41e75a
+    sha256: c203ffb1926e2cfd94714b9c3d270d53eddd85d57565d3829bb9ee7407b196db
   - type: shell
     commands:
       - cp -p /usr/share/automake-*/config.{sub,guess} .;
