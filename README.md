@@ -44,11 +44,11 @@ See also:
 ### Prepare
 
 ```
-$ flatpak --user install "flathub" "org.gnome.Sdk//3.34"
+$ flatpak --user install "flathub" "org.gnome.Sdk//3.36"
 ```
 
 ```
-$ flatpak --user install "flathub" "org.gnome.Platform//3.34"
+$ flatpak --user install "flathub" "org.gnome.Platform//3.36"
 ```
 
 Clone this repository, then checkout the right branch.
@@ -64,25 +64,25 @@ $ git submodule update
 ### Build
 
 ```
-$ flatpak-builder "build" "io.github.qalculate.Qalculate.yaml" --force-clean --install-deps-from="flathub"
+$ flatpak-builder "build" "io.github.Qalculate.yaml" --force-clean --install-deps-from="flathub"
 ```
 
 ### Test
 
 ```
-$ flatpak-builder --run "build" "io.github.qalculate.Qalculate.yaml" "sh"
+$ flatpak-builder --run "build" "io.github.Qalculate.yaml" "sh"
 ```
 
 ### Test run
 
 ```
-$ flatpak-builder --run "build" "io.github.qalculate.Qalculate.yaml" "qalculate-gtk"
+$ flatpak-builder --run "build" "io.github.Qalculate.yaml" "qalculate-gtk"
 ```
 
 ### Create repo
 
 ```
-$ flatpak-builder --repo="repo" --force-clean "build" "io.github.qalculate.Qalculate.yaml"
+$ flatpak-builder --repo="repo" --force-clean "build" "io.github.Qalculate.yaml"
 ```
 
 ### Install
@@ -92,19 +92,19 @@ $ flatpak --user remote-add --no-gpg-verify "qalculate-gtk" "repo"
 ```
 
 ```
-$ flatpak --user install "qalculate-gtk" "io.github.qalculate.Qalculate"
+$ flatpak --user install "qalculate-gtk" "io.github.Qalculate"
 ```
 
 ### Run
 
 ```
-$ flatpak --user run "io.github.qalculate.Qalculate"
+$ flatpak --user run "io.github.Qalculate"
 ```
 
 ### Uninstall
 
 ```
-$ flatpak --user uninstall "io.github.qalculate.Qalculate"
+$ flatpak --user uninstall "io.github.Qalculate"
 ```
 
 ```
@@ -114,7 +114,7 @@ $ flatpak --user remote-delete "qalculate-gtk"
 ### Build single-file bundle
 
 ```
-$ flatpak build-bundle "repo" "qalculate-gtk.flatpak" "io.github.qalculate.Qalculate" --runtime-repo="https://flathub.org/repo/flathub.flatpakrepo"
+$ flatpak build-bundle "repo" "qalculate-gtk.flatpak" "io.github.Qalculate" --runtime-repo="https://flathub.org/repo/flathub.flatpakrepo"
 ```
 
 ### Install single-file bundle
